@@ -1,6 +1,6 @@
+import React, { useEffect, useState } from 'react'
 import { setup, isSupported } from '@loomhq/record-sdk'
 import { oembed } from '@loomhq/loom-embed'
-import { useEffect, useState } from 'react'
 import { useColorModeValue } from '@chakra-ui/system'
 import { Box, Button, Text } from '@chakra-ui/react'
 
@@ -12,6 +12,8 @@ const LoomRecordButton = (props: {
 }) => {
   const [disabled, setDisabled] = useState(false)
   const [videoHTML, setVideoHTML] = useState('')
+  const recordButtonColor = useColorModeValue('gray.700', 'gray.50')
+  const disabledTextColor = useColorModeValue('gray.500', 'gray.400')
 
   useEffect(() => {
     async function setupLoom() {
@@ -49,14 +51,14 @@ const LoomRecordButton = (props: {
         {!videoHTML && (
           <Button
             id={BUTTON_ID}
-            color={useColorModeValue('gray.700', 'gray.50')}
+            color={recordButtonColor}
             isDisabled={disabled}
           >
             Record
           </Button>
         )}
         {disabled && (
-          <Text color={useColorModeValue('gray.500', 'gray.400')} fontSize="sm">
+          <Text color={disabledTextColor} fontSize="sm">
             Unsupported Browser
           </Text>
         )}
