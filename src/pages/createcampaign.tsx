@@ -174,7 +174,9 @@ export default function Component() {
       console.log({ userCampaign })
       if (userCampaign) {
         campaignForm.setValues(userCampaign)
-        preferencesForm.setValues(userCampaign.notificationPreferences)
+        if (userCampaign.notificationPreferences) {
+          preferencesForm.setValues(userCampaign.notificationPreferences)
+        }
         console.log({
           preferences: preferencesForm.values,
           capaignPreferences: userCampaign.notificationPreferences,
