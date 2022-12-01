@@ -27,8 +27,6 @@ import {
   IconButton,
   InputRightAddon,
 } from '@chakra-ui/react'
-import { setup, isSupported } from '@loomhq/record-sdk'
-import { oembed } from '@loomhq/loom-embed'
 import { CheckIcon, CloseIcon, EditIcon, EmailIcon } from '@chakra-ui/icons'
 import { useEthers } from '@usedapp/core'
 import { useDropzone } from 'react-dropzone'
@@ -40,6 +38,7 @@ import {
   PoolMetadata,
 } from '../services/textile/types'
 import { TextileInstance } from '../services/textile/textile'
+import LoomRecordButton from 'src/components/LoomRecordButton'
 
 const abi = require('../contracts/Pool.abi')
 const bytecode = require('../contracts/Pool.bytecode')
@@ -65,7 +64,6 @@ const dropzone: CSSProperties = {
   alignContent: 'start',
   alignItems: 'center',
   justifyItems: 'center',
-  background: '#FAFAFA',
   width: '446px',
   height: '103px',
   marginLeft: '2px',
@@ -89,11 +87,8 @@ const thumbLabel: CSSProperties = {
   justifyItems: 'center',
 }
 
-const PUBLIC_APP_ID = process.env.NEXT_PUBLIC_LOOM
-const BUTTON_ID = 'loom-record-sdk-button'
-
 export default function Component() {
-  const [videoHTML, setVideoHTML] = useState('')
+  const [videoUrl, setVideoUrl] = useState('')
   const [poolDeployable, setPoolDeployable] = useState(false)
 
   const { account, library } = useEthers()
@@ -171,43 +166,6 @@ export default function Component() {
 
   const [files, setFiles] = useState([])
 
-  const root = document.getElementById("record");
-
-  if (!root) {
-    return;
-  }
-
-  root.innerHTML = `<button id="${BUTTON_ID}">Record</button>`;
-
-  useEffect(() => {
-    async function setupLoom() {
-      const { supported, error } = await isSupported();
-      if (!supported) {
-        console.warn(`Error setting up Loom: ${error}`)
-        return
-      }
-      const button = document.getElementById(BUTTON_ID)
-      if (!button) {
-        return
-      }
-      const { configureButton } = await setup({
-        publicAppId: PUBLIC_APP_ID,
-      })
-      function insertEmbedPlayer(html: string) {
-      const target = document.getElementById("target");
-      if (target) {
-        target.innerHTML = html;
-      }
-    }
-    const sdkButton = configureButton({ element: Button });
-    sdkButton.on('insert-click', async (video) => {
-      const { html } = await oembed(video.sharedUrl, { width: 400 })
-      insertEmbedPlayer(html)
-    })
-  }
-    setupLoom()
-  }, [])
-
   useEffect(() => {
     const fetchCampaignAndPool = async () => {
       const textileInstance = await TextileInstance.getInstance()
@@ -216,7 +174,9 @@ export default function Component() {
       console.log({ userCampaign })
       if (userCampaign) {
         campaignForm.setValues(userCampaign)
-        preferencesForm.setValues(userCampaign.notificationPreferences)
+        if (userCampaign.notificationPreferences) {
+          preferencesForm.setValues(userCampaign.notificationPreferences)
+        }
         console.log({
           preferences: preferencesForm.values,
           capaignPreferences: userCampaign.notificationPreferences,
@@ -502,8 +462,9 @@ export default function Component() {
                   </SimpleGrid>
 
                   <SimpleGrid columns={3} spacing={6}>
-                    <FormControl id="email" mt={1}>
+                    <FormControl mt={1} as={GridItem} colSpan={[3, 2]}>
                       <FormLabel
+                        htmlFor="campaignBrief"
                         fontSize="sm"
                         fontWeight="md"
                         color={useColorModeValue('gray.700', 'gray.50')}
@@ -533,7 +494,7 @@ export default function Component() {
                   </SimpleGrid>
 
                   <SimpleGrid columns={3} spacing={6}>
-                    <FormControl as={GridItem} colSpan={[6, 4]}>
+                    <FormControl as={GridItem} colSpan={[3, 2]}>
                       <FormLabel
                         htmlFor="email"
                         fontSize="sm"
@@ -924,7 +885,9 @@ export default function Component() {
                           style={dropzone}
                         >
                           <input {...getInputProps()} />
-                          <Text>
+                          <Text
+                            color={useColorModeValue('gray.500', 'gray.400')}
+                          >
                             Drag 'n' drop some files here, or click to select
                             files
                           </Text>
@@ -941,7 +904,11 @@ export default function Component() {
                     >
                       Record Campaign Video
                     </FormLabel>
-                    <Box id='record'></Box>
+                    <Box>
+                      <LoomRecordButton
+                        onVideoChange={(url) => setVideoUrl(url)}
+                      />
+                    </Box>
                   </FormControl>
                 </Stack>
                 <Box
