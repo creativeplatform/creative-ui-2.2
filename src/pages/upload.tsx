@@ -114,7 +114,7 @@ export default function Component() {
             selectedFile,
             values.name,
             values.description,
-            values.attributes,
+            JSON.stringify(attributes)
         );
 
         await textileInstance.addNFTToUserCollection(nftMetadata);
