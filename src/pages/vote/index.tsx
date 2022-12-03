@@ -4,6 +4,7 @@ import {  FaUsers, FaCertificate } from 'react-icons/fa'
 import { useRouter } from "next/router"
 import { Card } from "src/components/voting"
 import { ApolloClient, InMemoryCache, gql } from '@apollo/client';
+import { useAuth } from "src/services/context/auth";
 
 
 export default function Vote ({ proposals }) {
@@ -17,6 +18,7 @@ export default function Vote ({ proposals }) {
     const [value, setValue] = React.useState('closed')
     const [type, setType] = React.useState('all')
     const [snapshots, setSnapshots] = React.useState(proposals)
+    const { isLoggedIn, role } = useAuth()
 
     const filterState = () => {
         
@@ -98,17 +100,20 @@ export default function Vote ({ proposals }) {
             marginTop={5}>
             <Text>Have your say in the future of the Creative platform Ecosystem</Text>
             </Box>
-            <Box
-            marginTop={5}>
-            <Button
-                onClick={() => route.push('/vote/create')}
-                padding={5}
-                backgroundColor={'brand.400'}>
-                <Heading
-                size='sm'
-                color={'white'}>Make a Proposal</Heading>
-            </Button>
-            </Box>
+            { isLoggedIn && role === 'brand' && (
+                <Box
+                marginTop={5}>
+                <Button
+                    onClick={() => route.push('/vote/create')}
+                    padding={5}
+                    backgroundColor={'brand.400'}>
+                    <Heading
+                    size='sm'
+                    color={'white'}>Make a Proposal</Heading>
+                </Button>
+                </Box>
+            )}
+            
         </Box>
             <Box
                 paddingTop={10}>
