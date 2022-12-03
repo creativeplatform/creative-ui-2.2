@@ -634,17 +634,17 @@ const Header = ({ children }: HeaderProps): JSX.Element => {
                     overflowY={['scroll', 'scroll', 'hidden', 'hidden']}
                   >
                     {!isLoggedIn && (
-                      <MenuItem color="pink.500">
+                      <MenuItem as={Box} color="pink.500">
                         <SignIn />
                       </MenuItem>
                     )}
                     {!isLoggedIn && (
-                      <MenuItem color="blue.500">
+                      <MenuItem as={Box} color="blue.500">
                         <SignUp />
                       </MenuItem>
                     )}
                     {isLoggedIn && role === 'brand' && (
-                      <MenuItem color="yellow.500">
+                      <MenuItem as={Box} color="yellow.500">
                         <InviteUser />
                       </MenuItem>
                     )}
