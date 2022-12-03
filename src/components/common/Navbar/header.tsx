@@ -97,12 +97,8 @@ const Header = ({ children }: HeaderProps): JSX.Element => {
 
   let chainName: string
 
-  if (chainId === ChainId.Rinkeby) {
-    chainName = 'Rinkeby'
-  } else if (chainId === ChainId.Mumbai) {
+  if (chainId === ChainId.Mumbai) {
     chainName = 'Mumbai'
-  } else if (chainId === ChainId.Mainnet) {
-    chainName = 'Mainnet'
   } else if (chainId === ChainId.Polygon) {
     chainName = 'Polygon'
   } else {
@@ -382,7 +378,15 @@ const Header = ({ children }: HeaderProps): JSX.Element => {
                     d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                   />
                 </chakra.svg>
+                <NextLink
+                href="https://app.clarity.so/creativeOrg/docs/d259949c-fc14-484c-a53f-f6e80ce0ce04"
+                target={'_blank'}
+                passHref
+              >
+                <LinkOverlay>
                 <chakra.span ml={3}>Watch Demo</chakra.span>
+                </LinkOverlay>
+                </NextLink>
               </LinkBox>
             </Box>
 

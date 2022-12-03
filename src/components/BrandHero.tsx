@@ -97,6 +97,7 @@ const BrandHero = () => {
                     fontSize={{ base: 'md', md: 'lg' }}
                     rounded="md"
                     color={'white'}
+                    href="https://thecreativedao.crew3.xyz/"
                     bg="brand.600"
                     _hover={{ bg: 'red.800' }}
                   >
