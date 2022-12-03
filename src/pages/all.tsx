@@ -1,11 +1,12 @@
 import { useState } from 'react'
-import { Box } from '@chakra-ui/react'
+import { Box, useToast } from '@chakra-ui/react'
 import BucketCard from '../components/common/Cards/BucketCard'
 import { Button } from '@chakra-ui/react'
 import { TextileInstance } from '../services/textile/textile'
 import BatchStorage from '../components/common/Button/batchStorage'
 import { providers } from 'ethers'
 import { init } from '@textile/eth-storage'
+import { NFTMetadata } from 'src/services/textile/types'
 
 type WindowInstanceWithEthereum = Window &
   typeof globalThis & { ethereum?: providers.ExternalProvider }
@@ -17,30 +18,35 @@ class StrongType<Definition, Type> {
 
 export default function All() {
   const [displayPix, setDisplayPix] = useState(false)
-  const [cids, setCids] = useState([])
-  let photos = []
-  let cid = []
+  const [photos, setPhotos] = useState<NFTMetadata[]>([])
+  const toast = useToast()
 
   const fetchGallery = async () => {
     const textileInstance = await TextileInstance.getInstance()
-    photos = await textileInstance.getAllUserNFTs()
+    const photos = await textileInstance.getAllUserNFTs()
+
+    setPhotos(photos)
+
+    if (photos.length === 0) {
+      toast({
+        title: 'No photos',
+        status: 'info',
+        description: 'No photos have been uploaded yet.',
+        duration: 9000,
+        isClosable: true,
+      })
+      return
+    }
     setDisplayPix(true)
     // console.log(photos);
-    photos.map((element) => {
-      cid.push({
-        cid: element.cid,
-        name: element.name,
-        description: element.description,
-      })
-    })
+
     // console.log(photos);
     // console.log(cid);
-    setCids(cid)
   }
   // TODO: Be able to delete NFT item
-  const deleteMedia = async (photos) => {
+  const deleteMedia = async (photo: NFTMetadata) => {
     const textileInstance = await TextileInstance.getInstance()
-    await textileInstance.deleteNFTFromBucket(photos)
+    await textileInstance.deleteNFTFromBucket(photo)
   }
 
   const batchStorage = async () => {
@@ -50,15 +56,19 @@ export default function All() {
     const storage = await init(provider.getSigner())
     const textileInstance = await TextileInstance.getInstance()
 
-    if ((await storage.hasDeposit()) && cids.length > 0) {
-      for (let nftMetadata of cids) {
-        await textileInstance.uploadTokenMetadata(storage, nftMetadata)
-      }
-    } else if (cids.length > 0) {
+    if ((await storage.hasDeposit()) && photos.length > 0) {
+      await Promise.all(
+        photos.map((nftMetadata) =>
+          textileInstance.uploadTokenMetadata(storage, nftMetadata)
+        )
+      )
+    } else if (photos.length > 0) {
       await storage.addDeposit()
-      for (let nftMetadata of cids) {
-        await textileInstance.uploadTokenMetadata(storage, nftMetadata)
-      }
+      await Promise.all(
+        photos.map((nftMetadata) =>
+          textileInstance.uploadTokenMetadata(storage, nftMetadata)
+        )
+      )
     }
   }
 
@@ -118,15 +128,15 @@ export default function All() {
         justifyContent={['center', 'center', 'center', 'center']}
         flexWrap={['nowrap', 'nowrap', 'wrap', 'wrap']}
       >
-        {cids.map((id, index) => (
+        {photos.map((photo, index) => (
           <BucketCard
             key={index}
-            imagelink={`https://dweb.link/ipfs/${id.cid}`}
-            creator={id.creator}
-            name={id.name}
-            description={id.description}
-            deleteMedia={deleteMedia}
-          ></BucketCard>
+            imagelink={`https://dweb.link/ipfs/${photo.cid}`}
+            creator=""
+            name={photo.name}
+            description={photo.description}
+            deleteMedia={() => deleteMedia(photo)}
+          />
         ))}
       </Box>
     </Box>
