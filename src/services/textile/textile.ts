@@ -87,29 +87,30 @@ export class TextileInstance {
 
   private async initCollections(asAdmin?: boolean, userAuth?: UserAuth): Promise<void> {
     await this.client.getToken(TextileInstance.identity);
-    
+
     const threadList: Array<GetThreadResponse> = await this.client.listThreads()
-
     const thread = threadList.find((obj) => obj.name === this.names.t)
-
     if (!thread) {
       this.threadID = await this.client.newDB(ThreadID.fromRandom())
-      await this.client.newCollection(this.threadID, {
-        name: this.names.u,
-      })
-      await this.client.newCollection(this.threadID, {
-        name: this.names.n,
-      })
-      await this.client.newCollection(this.threadID, {
-        name: this.names.c,
-      })
-      await this.client.newCollection(this.threadID, {
-        name: this.names.p,
-      })
     } else {
       this.threadID = ThreadID.fromString(thread.id)
       console.log({ threadID: this.threadID })
     }
+
+    // get unique list of collections the user already has
+    const collections = await this.client.listCollections(this.threadID)
+    const existingCollectionNames = new Set(collections.map(({ name }) => name))
+
+    // if the user does not have a collection defined in this.names, then create it
+    await Promise.all(
+      Object.values(this.names).map((name) =>
+        existingCollectionNames.has(name)
+          ? Promise.resolve
+          : this.client.newCollection(this.threadID, {
+              name,
+            })
+      )
+    )
   }
 
   private static async loginWithChallenge(newUser?: UserModel) {
