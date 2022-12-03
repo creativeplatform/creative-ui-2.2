@@ -13,36 +13,24 @@ import {
     FormControl,
     FormLabel,
     Input,
-    ButtonGroup,
-    InputLeftAddon,
-    FormHelperText,
     Textarea,
-    Avatar,
     Icon,
     Button,
     VisuallyHidden,
     Select,
-    Checkbox,
-    RadioGroup,
-    Radio,
     useToast,
-    Spinner,
-    AspectRatio,
     useDisclosure,
 } from "@chakra-ui/react";
-import { Contract, ethers, providers } from "ethers";
-import { FaUser } from "react-icons/fa";
+import { Contract, providers } from "ethers";
 import { useForm } from "react-hook-form";
 import { TextileInstance } from "../services/textile/textile";
 import AddAttributes from "../components/Attributes/AddAttributes";
 import AttributesList from "../components/Attributes/AttributesList";
 import { init } from "@textile/eth-storage";
-import { BigNumber } from "ethers";
 import { useEthers } from "@usedapp/core";
 import { NFTMetadata } from "../services/textile/types";
 import abi from "../contracts/YourCollectible.abi";
 import address from "../contracts/YourCollectible.address";
-import mime from "mime"
 
 type WindowInstanceWithEthereum = Window &
     typeof globalThis & { ethereum?: providers.ExternalProvider };
@@ -126,7 +114,7 @@ export default function Component() {
             selectedFile,
             values.name,
             values.description,
-            values.attributes,
+            JSON.stringify(attributes)
         );
 
         await textileInstance.addNFTToUserCollection(nftMetadata);
@@ -368,7 +356,6 @@ export default function Component() {
                                         <AttributesList
                                             attributes={attributes}
                                             deleteAttribute={deleteAttribute}
-                                            {...register("attributes")}
                                         />
                                         <AddAttributes
                                             addAttributes={addAttribute}
