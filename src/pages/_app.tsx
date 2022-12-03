@@ -7,7 +7,7 @@ import {
   HStack,
   Icon,
   Stack,
-  Text,
+  Text
 } from '@chakra-ui/react'
 import theme from '../styles/theme'
 import Header from '../components/common/Navbar/header'
@@ -22,6 +22,8 @@ import { apolloClient } from '../services/apollo/apollo-client'
 import { AuthProvider } from '../services/context/auth'
 import fontFace from '../styles/fontFace'
 import { Global } from '@emotion/react'
+
+
 
 const config: Config = {
   readOnlyChainId: Mumbai.chainId,

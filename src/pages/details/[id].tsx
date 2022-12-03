@@ -3,7 +3,8 @@ import { useRouter } from 'next/router'
 import { FaGlobe, FaTwitter } from 'react-icons/fa'
 import ReactPlayer from 'react-player/lazy'
 import { CustomTooltip } from 'src/components/common/CustomTooltip'
-import { CountDown } from '../../components/common/CountDown'
+import StepsComponent from '../../components/stepper/StepsComponent'
+
 
 export default function Details() {
   const router = useRouter()
@@ -111,7 +112,8 @@ export default function Details() {
             {property.capital}
           </Heading>
         </Box>
-        <CountDown
+        <StepsComponent />
+        {/* <CountDown
           title="Voting Ends"
           time={property.voting}
           tooltip="lorem ipsum"
@@ -125,7 +127,7 @@ export default function Details() {
           title="Submission Deadline"
           time={property.submission}
           tooltip="lorem ipsum"
-        />
+        /> */}
       </Box>
       <Box
         margin={'auto'}
@@ -136,12 +138,6 @@ export default function Details() {
         flexDir={['column', 'column', 'row', 'row']}
         justifyContent={['space-evenly']}
       >
-        <Button background="#e50168" color="white" margin={10}>
-          Submit NFT
-        </Button>
-        <Button background="#e50168" color="white" margin={10}>
-          Vote for Submission
-        </Button>
       </Box>
     </Box>
   )
