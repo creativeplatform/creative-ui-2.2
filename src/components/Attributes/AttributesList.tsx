@@ -1,4 +1,4 @@
-import { HStack, VStack, Stack, Text, Flex, Badge } from '@chakra-ui/react'
+import { HStack, Stack, Flex, Badge } from '@chakra-ui/react'
 import { DeleteIcon} from '@chakra-ui/icons'
 import React from 'react'
 
@@ -16,10 +16,9 @@ function AttributeList({ attributes, deleteAttribute }) {
        : (
         <Stack direction={["column", "row"]} spacing="24px">
         {attributes.map((attribute) => (
-            <HStack spacing="auto" w="sm">
+            <HStack key={attribute.id} spacing="auto" w="sm">
                 <Flex>
                     <Badge
-                        key={attribute.id} 
                         colorScheme="purple" 
                         variant="outline"
                         borderRadius="sm" 
