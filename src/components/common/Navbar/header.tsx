@@ -651,8 +651,10 @@ const Header = ({ children }: HeaderProps): JSX.Element => {
                     {isLoggedIn && (
                       <MenuItem
                         as={Button}
-                        color="white"
                         colorScheme="pink"
+                        _hover={{
+                          color: useColorModeValue('white', 'black'),
+                        }}
                         variant="solid"
                         size="md"
                         mt={2}
