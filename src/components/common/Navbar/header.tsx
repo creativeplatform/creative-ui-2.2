@@ -733,9 +733,11 @@ const Header = ({ children }: HeaderProps): JSX.Element => {
                     {!isLoggedIn && (
                       <MenuItem
                         as={Button}
-                        color="white"
-                        colorScheme={'red'}
                         variant="solid"
+                        colorScheme="red"
+                        _hover={{
+                          color: useColorModeValue('white', 'black'),
+                        }}
                         onClick={() => {
                           deactivate()
                           toast({
@@ -752,9 +754,11 @@ const Header = ({ children }: HeaderProps): JSX.Element => {
                     {isLoggedIn && (
                       <MenuItem
                         as={Button}
-                        colorScheme={'red'}
-                        color={'white'}
+                        colorScheme="red"
                         variant="solid"
+                        _hover={{
+                          color: useColorModeValue('white', 'black'),
+                        }}
                         onClick={() => {
                           logOut()
                         }}
