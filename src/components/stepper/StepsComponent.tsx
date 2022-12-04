@@ -1,31 +1,47 @@
 import { Step, Steps, useSteps } from 'chakra-ui-steps';
-import { Flex, Button, Heading } from '@chakra-ui/react'
+import { Flex, Button, Heading, useColorModeValue } from '@chakra-ui/react'
 import Lorem from 'react-lorem-component';
 import { CountDown } from '../../components/common/CountDown'
 import { FiCheckCircle } from "react-icons/fi"
 
-// const content = (
-//   <Flex py={4}>
-//     <CountDown
-//     title="Voting Ends"
-//     time={props.voting}
-//     tooltip="lorem ipsum"
-//     />
-//   </Flex>
-// );
-
-const steps = [{ label: "Submission Deadline" }, { label: "Voting Deadline" }, { label: "Decision Deadline" }]
+const steps = [
+  {
+    label: 'Submission Deadline',
+    props: {
+      time: '12/10/2022',
+      tooltip: 'lorem ipsum',
+    },
+  },
+  {
+    label: 'Voting Deadline',
+    props: {
+      time: '12/6/2022',
+      tooltip: 'lorem ipsum',
+    },
+  },
+  {
+    label: 'Decision Deadline',
+    props: {
+      time: '12/4/2022',
+      tooltip: 'lorem ipsum',
+    },
+  },
+]
 
 export const StepsComponent = () => {
   const { nextStep, prevStep, reset, activeStep } = useSteps({
     initialStep: 0,
   })
+  const bg = useColorModeValue('#F0F0F0', 'gray.900')
+
   return (
     <Flex flexDir="column" width="100%">
       <Steps checkIcon={FiCheckCircle} activeStep={activeStep} labelOrientation={"horizontal"}>
-        {steps.map(({ label }, index) => (
+        {steps.map(({ label, props }, index) => (
           <Step label={label} key={label}>
-            {/* {content} */}
+            <Flex my={4} p={4} bg={bg} borderRadius={10}>
+              <CountDown title="Deadline" {...props} />
+            </Flex>
           </Step>
         ))}
       </Steps>
