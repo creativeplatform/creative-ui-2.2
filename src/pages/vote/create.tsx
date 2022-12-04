@@ -12,6 +12,7 @@ import {
 import snapshot from '@snapshot-labs/snapshot.js'
 import { FaWindowClose } from 'react-icons/fa'
 import { Web3Provider } from '@ethersproject/providers'
+import Router from 'next/router'
 
 const hub = 'https://hub.snapshot.org'
 const client = new snapshot.Client712(hub)
@@ -26,6 +27,7 @@ export default function Create() {
   const [endDate, setEndDate] = useState(new Date())
   const [endTime, setEndTime] = useState(new Date())
   const [choices, setChoices] = useState(['yes', 'no'])
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const inputRef = useRef()
 
@@ -49,6 +51,7 @@ export default function Create() {
 
   const submit = async () => {
     try {
+      setIsSubmitting(true)
       // get current block of Gnosis network
       const provider = await snapshot.utils.getProvider('100')
       const block = await snapshot.utils.getBlockNumber(provider)
@@ -70,8 +73,10 @@ export default function Create() {
         plugins: JSON.stringify({}),
       })) as any
       console.log(`created proposal ${receipt.id}`)
+      Router.push('/vote')
     } catch (error) {
       console.log(error)
+      setIsSubmitting(false)
     }
   }
 
@@ -111,7 +116,11 @@ export default function Create() {
     >
       <Box padding={5} width={['100%', '100%', '100%', '40%']}>
         <Box marginBottom={4} cursor="pointer">
-          <Box padding={4} borderTopRadius={20} bgGradient="linear(to-l, #FFCC80, #D32F2F, #EC407A)">
+          <Box
+            padding={4}
+            borderTopRadius={20}
+            bgGradient="linear(to-l, #FFCC80, #D32F2F, #EC407A)"
+          >
             <Heading size="md" color="white">
               Title
             </Heading>
@@ -133,7 +142,11 @@ export default function Create() {
           </Box>
         </Box>
         <Box marginBottom={4} cursor="pointer">
-          <Box padding={4} borderTopRadius={20} bgGradient="linear(to-l, #FFCC80, #D32F2F, #EC407A)">
+          <Box
+            padding={4}
+            borderTopRadius={20}
+            bgGradient="linear(to-l, #FFCC80, #D32F2F, #EC407A)"
+          >
             <Heading color="white" size="md">
               Content
             </Heading>
@@ -154,7 +167,11 @@ export default function Create() {
           </Box>
         </Box>
         <Box marginBottom={4} cursor="pointer">
-          <Box padding={4} borderTopRadius={20} bgGradient="linear(to-l, #FFCC80, #D32F2F, #EC407A)">
+          <Box
+            padding={4}
+            borderTopRadius={20}
+            bgGradient="linear(to-l, #FFCC80, #D32F2F, #EC407A)"
+          >
             <Heading color={'white'} size="md">
               Choices
             </Heading>
@@ -173,7 +190,7 @@ export default function Create() {
                       <Input
                         marginBottom={5}
                         className="choices"
-                        background={"default"}
+                        background={'default'}
                         placeholder="Enter Choice"
                         value={field || ''}
                         ref={inputRef}
@@ -262,6 +279,7 @@ export default function Create() {
             }}
           />
           <Button
+            isLoading={isSubmitting}
             marginTop={4}
             background={'brand.400'}
             onClick={() => submit()}
