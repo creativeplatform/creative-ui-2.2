@@ -1,34 +1,11 @@
-import { Step, Steps, useSteps } from 'chakra-ui-steps';
+import { Step, Steps, useSteps } from 'chakra-ui-steps'
 import { Flex, Button, Heading, useColorModeValue } from '@chakra-ui/react'
-import Lorem from 'react-lorem-component';
-import { CountDown } from '../../components/common/CountDown'
-import { FiCheckCircle } from "react-icons/fi"
+import { FiCheckCircle } from 'react-icons/fi'
 
-const steps = [
-  {
-    label: 'Submission Deadline',
-    props: {
-      time: '12/10/2022',
-      tooltip: 'lorem ipsum',
-    },
-  },
-  {
-    label: 'Voting Deadline',
-    props: {
-      time: '12/6/2022',
-      tooltip: 'lorem ipsum',
-    },
-  },
-  {
-    label: 'Decision Deadline',
-    props: {
-      time: '12/4/2022',
-      tooltip: 'lorem ipsum',
-    },
-  },
-]
-
-export const StepsComponent = () => {
+export const StepsComponent: React.FC<{
+  steps: { label: string }[]
+  children: React.ReactNode
+}> = (props) => {
   const { nextStep, prevStep, reset, activeStep } = useSteps({
     initialStep: 0,
   })
@@ -36,17 +13,21 @@ export const StepsComponent = () => {
 
   return (
     <Flex flexDir="column" width="100%">
-      <Steps checkIcon={FiCheckCircle} activeStep={activeStep} labelOrientation={"horizontal"}>
-        {steps.map(({ label, props }, index) => (
+      <Steps
+        checkIcon={FiCheckCircle}
+        activeStep={activeStep}
+        labelOrientation={'horizontal'}
+      >
+        {props.steps.map(({ label }, index) => (
           <Step label={label} key={label}>
             <Flex my={4} p={4} bg={bg} borderRadius={10}>
-              <CountDown title="Deadline" {...props} />
+              {props.children[index]}
             </Flex>
           </Step>
         ))}
       </Steps>
-      {activeStep === steps.length ? (
-        <Flex px={4} py={4} width="100%" flexDirection="column">
+      {activeStep === props.steps.length ? (
+        <Flex p={4} bg={bg} width="100%" flexDirection="column">
           <Heading fontSize="xl" textAlign="center">
             Woohoo! All steps completed!
           </Heading>
@@ -66,7 +47,7 @@ export const StepsComponent = () => {
             Prev
           </Button>
           <Button size="sm" onClick={nextStep}>
-            {activeStep === steps.length - 1 ? "Finish" : "Next"}
+            {activeStep === props.steps.length - 1 ? 'Finish' : 'Next'}
           </Button>
         </Flex>
       )}
