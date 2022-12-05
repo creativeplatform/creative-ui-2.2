@@ -3,6 +3,8 @@ import { useRouter } from 'next/router'
 import { FaGlobe, FaTwitter } from 'react-icons/fa'
 import ReactPlayer from 'react-player/lazy'
 import { CustomTooltip } from 'src/components/common/CustomTooltip'
+import StepsComponent from '../../components/stepper/StepsComponent'
+import Lorem from 'react-lorem-component'
 import { CountDown } from '../../components/common/CountDown'
 
 export default function Details() {
@@ -111,21 +113,29 @@ export default function Details() {
             {property.capital}
           </Heading>
         </Box>
-        <CountDown
-          title="Voting Ends"
-          time={property.voting}
-          tooltip="lorem ipsum"
-        />
-        <CountDown
-          title="Decision"
-          time={property.decision}
-          tooltip="lorem ipsum"
-        />
-        <CountDown
-          title="Submission Deadline"
-          time={property.submission}
-          tooltip="lorem ipsum"
-        />
+        <StepsComponent
+          steps={[
+            { label: 'Form 1' },
+            { label: 'Form 2' },
+            { label: 'Form 3' },
+          ]}
+        >
+          <CountDown
+            title="Voting Ends"
+            time={property.voting}
+            tooltip="lorem ipsum"
+          />
+          <CountDown
+            title="Decision"
+            time={property.decision}
+            tooltip="lorem ipsum"
+          />
+          <CountDown
+            title="Submission Deadline"
+            time={property.submission}
+            tooltip="lorem ipsum"
+          />
+        </StepsComponent>
       </Box>
       <Box
         margin={'auto'}
@@ -135,14 +145,7 @@ export default function Details() {
         display="flex"
         flexDir={['column', 'column', 'row', 'row']}
         justifyContent={['space-evenly']}
-      >
-        <Button background="#e50168" color="white" margin={10}>
-          Submit NFT
-        </Button>
-        <Button background="#e50168" color="white" margin={10}>
-          Vote for Submission
-        </Button>
-      </Box>
+      ></Box>
     </Box>
   )
 }
