@@ -2,14 +2,14 @@ import { Step, Steps, useSteps } from 'chakra-ui-steps'
 import { Flex, Button, Heading, useColorModeValue } from '@chakra-ui/react'
 import { FiCheckCircle } from 'react-icons/fi'
 import { useAuth } from '../../services/context/auth'
-import { ReactNode, FC, useEffect, useRef, useState } from 'react'
-
-const { isLoggedIn, account, role, logOut } = useAuth()
+import { ReactNode, FC } from 'react'
 
 export const StepsComponent: FC<{
   steps: { label: string }[]
   children: ReactNode
 }> = (props) => {
+  const { isLoggedIn, account, role, logOut } = useAuth()
+
   const { nextStep, prevStep, reset, activeStep } = useSteps({
     initialStep: 0,
   })
@@ -50,7 +50,7 @@ export const StepsComponent: FC<{
           >
             Prev
           </Button>
-            <Button size="sm" onClick={nextStep}>
+          <Button size="sm" onClick={nextStep}>
             {activeStep === props.steps.length - 1 ? 'Finish' : 'Next'}
           </Button>
         </Flex>
