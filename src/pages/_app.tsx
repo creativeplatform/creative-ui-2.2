@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { AppProps } from 'next/app'
-import { Mumbai,Rinkeby, Config, DAppProvider, useEthers } from '@usedapp/core'
+import { Mumbai, Rinkeby, Config, DAppProvider, useEthers } from '@usedapp/core'
 import {
   ChakraProvider,
   Box,
@@ -8,6 +8,7 @@ import {
   Icon,
   Stack,
   Text,
+  chakra,
 } from '@chakra-ui/react'
 import theme from '../styles/theme'
 import Header from '../components/common/Navbar/header'
@@ -26,7 +27,8 @@ import { Global } from '@emotion/react'
 const config: Config = {
   readOnlyChainId: Mumbai.chainId,
   readOnlyUrls: {
-    [Mumbai.chainId]: 'https://polygon-mainnet.g.alchemy.com/v2/NDsioMXTwci91lMdODnh3iBbcJoxCgy8',
+    [Mumbai.chainId]:
+      'https://polygon-mainnet.g.alchemy.com/v2/NDsioMXTwci91lMdODnh3iBbcJoxCgy8',
   },
   notifications: {
     checkInterval: 1500,
@@ -50,7 +52,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
     <DAppProvider config={config}>
       <ApolloProvider client={apolloClient()}>
         <ChakraProvider resetCSS theme={theme}>
-        <Global styles={fontFace} />
+          <Global styles={fontFace} />
           <StoreContainer.Provider>
             <AuthProvider>
               <Box minH="100vh" minW="100vw" py={0}>
@@ -58,7 +60,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
                 {library && library?.network.chainId === Mumbai.chainId ? (
                   ''
                 ) : (
-                  <Box as="section" pt="8" pb="12">
+                  <Box as="section" pb="12">
                     <Stack
                       direction={{ base: 'column', sm: 'row' }}
                       justifyContent="center"
@@ -84,7 +86,9 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
                     </Stack>
                   </Box>
                 )}
-                <Component {...pageProps} />
+                <chakra.main maxW="1200px" marginX="auto" px="6">
+                  <Component {...pageProps} />
+                </chakra.main>
                 <Footer />
               </Box>
             </AuthProvider>

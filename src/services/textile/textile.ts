@@ -1,4 +1,5 @@
-import { CoreAPI } from '@textile/eth-storage';
+import { CoreAPI } from '@textile/eth-storage'
+import * as pb from '@textile/threads-client-grpc/threads_pb'
 import {
   Where,
   WriteTransaction,
@@ -16,8 +17,16 @@ import {
   DBInfo,
   PublicKey,
 } from '@textile/hub'
-import { BigNumber } from 'ethers';
-import { CampaignMetadata, CampaignSettings, DecryptedMessage, NFTMetadata, PoolMetadata, TokenMetadata, UserModel } from "./types";
+import { BigNumber } from 'ethers'
+import {
+  CampaignMetadata,
+  CampaignSettings,
+  DecryptedMessage,
+  NFTMetadata,
+  PoolMetadata,
+  TokenMetadata,
+  UserModel,
+} from './types'
 
 export class TextileInstance {
   private readonly ipfsGateway = 'https://dweb.link'
@@ -58,19 +67,22 @@ export class TextileInstance {
   private async initWithSig(newUser?: UserModel) {
     const { payload, user } = await TextileInstance.loginWithChallenge(newUser)
 
-    this.user = user;
+    this.user = user
 
     this.users = Users.withUserAuth(payload)
     const token = await this.users.getToken(TextileInstance.identity)
 
     this.client = Client.withUserAuth(payload)
     await this.client.getToken(TextileInstance.identity)
-    
+
     let buckets = Buckets.withUserAuth(payload)
     await buckets.setToken(token)
     await buckets.getToken(TextileInstance.identity)
 
-    localStorage.setItem("user-private-identity" , TextileInstance.identity.toString())
+    localStorage.setItem(
+      'user-private-identity',
+      TextileInstance.identity.toString()
+    )
 
     this.mailboxId = await this.users.setupMailbox()
 
@@ -80,13 +92,16 @@ export class TextileInstance {
     }
     this.bucketInfo = {
       bucket: buckets,
-      bucketKey: buck.root.key
+      bucketKey: buck.root.key,
     }
     await this.initCollections(true, payload)
   }
 
-  private async initCollections(asAdmin?: boolean, userAuth?: UserAuth): Promise<void> {
-    await this.client.getToken(TextileInstance.identity);
+  private async initCollections(
+    asAdmin?: boolean,
+    userAuth?: UserAuth
+  ): Promise<void> {
+    await this.client.getToken(TextileInstance.identity)
 
     const threadList: Array<GetThreadResponse> = await this.client.listThreads()
     const thread = threadList.find((obj) => obj.name === this.names.t)
@@ -113,65 +128,76 @@ export class TextileInstance {
     )
   }
 
-  private static async loginWithChallenge(newUser?: UserModel) {
-          return new Promise<{ payload: UserAuth, user: UserModel }>((resolve, reject) => {
-              const socketUrl = `wss://little-frost-1633.fly.dev/`;
-              const socket = new WebSocket(socketUrl);
-              
-              socket.onopen = () => {
-                  console.log("CHALLENGE_OPEN", newUser)
-                  const publicKey = TextileInstance.identity.public.toString();
-                  socket.send( 
-                      JSON.stringify({
-                          newUser ,
-                          pubkey: publicKey,
-                          type: "token",
-                      })
-                  );
-                  
-                  socket.onmessage = async (event) => {
-                      console.log("CHALLENGE_MESSAGE", event)
-                      const data = JSON.parse(event.data);
-                      switch (data.type) {
-                          case "error": {
-                              // throw new Error(data.value)
-                              console.log("CHALLENGE_ERROR: ", data)
-                              reject(data.value);
-                              break;
-                          }
-                          case "challenge": {
-                              console.log("CHALLENGE_SIG_BEGIN: ")
-                              const buf = Buffer.from(data.value);
-                              
-                              const signed = await TextileInstance.identity.sign(buf);
+  public async collections(): Promise<pb.GetCollectionInfoReply.AsObject[]> {
+    if (!this.client) {
+      throw new Error('No client')
+    }
+    return this.client.listCollections(this.threadID)
+  }
 
-                              console.log("CHALLENGE_SIG: ", data)
-                              socket.send(
-                                  JSON.stringify({
-                                      type: "challenge",
-                                      sig: Buffer.from(signed).toJSON(),
-                                  })
-                              );
-                              console.log("CHALLENGE_SIG")
-                              break;
-                          }
-                          case "token": {
-                              console.log("CHALLENGE_RESOLVE: ", data)
-                              resolve(data.value);
-                              break;
-                          }
-                      }
-                  };
-              };
-          });
-      // };
-  };
+  private static async loginWithChallenge(newUser?: UserModel) {
+    return new Promise<{ payload: UserAuth; user: UserModel }>(
+      (resolve, reject) => {
+        const socketUrl = `wss://little-frost-1633.fly.dev/`
+        const socket = new WebSocket(socketUrl)
+
+        socket.onopen = () => {
+          console.log('CHALLENGE_OPEN', newUser)
+          const publicKey = TextileInstance.identity.public.toString()
+          socket.send(
+            JSON.stringify({
+              newUser,
+              pubkey: publicKey,
+              type: 'token',
+            })
+          )
+
+          socket.onmessage = async (event) => {
+            console.log('CHALLENGE_MESSAGE', event)
+            const data = JSON.parse(event.data)
+            switch (data.type) {
+              case 'error': {
+                // throw new Error(data.value)
+                console.log('CHALLENGE_ERROR: ', data)
+                reject(data.value)
+                break
+              }
+              case 'challenge': {
+                console.log('CHALLENGE_SIG_BEGIN: ')
+                const buf = Buffer.from(data.value)
+
+                const signed = await TextileInstance.identity.sign(buf)
+
+                console.log('CHALLENGE_SIG: ', data)
+                socket.send(
+                  JSON.stringify({
+                    type: 'challenge',
+                    sig: Buffer.from(signed).toJSON(),
+                  })
+                )
+                console.log('CHALLENGE_SIG')
+                break
+              }
+              case 'token': {
+                console.log('CHALLENGE_RESOLVE: ', data)
+                resolve(data.value)
+                break
+              }
+            }
+          }
+        }
+      }
+    )
+    // };
+  }
 
   public static async setPrivateKey(privateKey: PrivateKey) {
     TextileInstance.identity = privateKey
   }
 
-  public static async getInstance(withSig: boolean = false): Promise<TextileInstance> {
+  public static async getInstance(
+    withSig: boolean = false
+  ): Promise<TextileInstance> {
     if (!TextileInstance.singletonInstance) {
       TextileInstance.singletonInstance = new TextileInstance()
       if (withSig) {
@@ -180,11 +206,11 @@ export class TextileInstance {
         await TextileInstance.singletonInstance.init()
       }
     }
-    return TextileInstance.singletonInstance;
+    return TextileInstance.singletonInstance
   }
 
   public static async signUp(newUser?: UserModel) {
-    console.log("SIGNUP_BEGIN")
+    console.log('SIGNUP_BEGIN')
     TextileInstance.setPrivateKey(newUser.identity)
     TextileInstance.singletonInstance = new TextileInstance()
     await TextileInstance.singletonInstance.initWithSig(newUser)
@@ -358,7 +384,7 @@ export class TextileInstance {
     file: File,
     name = '',
     description = '',
-    attributes = '{"": any; }'
+    attributes: NFTMetadata['attributes'] = []
   ): Promise<NFTMetadata> {
     if (!this.bucketInfo.bucket || !this.bucketInfo.bucketKey) {
       throw new Error('No bucket client or root key')
@@ -382,7 +408,7 @@ export class TextileInstance {
       description: description,
       path: location,
       date: now.toString(),
-      attributes: { attributes },
+      attributes,
     }
   }
 
@@ -452,12 +478,12 @@ export class TextileInstance {
     console.log('textile cid', cid)
   }
 
-  public async addNFTToUserCollection(nft: NFTMetadata) {
+  public async addNFTToUserCollection(nft: NFTMetadata, collection: string) {
     if (!this.client) {
       throw new Error('No client')
     }
     console.log('adding nft to user collection...')
-    await this.client.create(this.threadID, this.names.n, [nft])
+    await this.client.create(this.threadID, collection, [nft])
   }
 
   public async getAllUserNFTs(): Promise<Array<NFTMetadata>> {
@@ -553,7 +579,7 @@ export class TextileInstance {
     }
 
     console.log('created campaign')
-    
+
     return campaignCid
   }
 
@@ -849,5 +875,4 @@ export class TextileInstance {
 
     return preferences
   }
-
 }

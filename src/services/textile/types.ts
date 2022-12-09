@@ -33,9 +33,7 @@ export interface NFTMetadata {
   ownerWalletAddress?: string // account address
   user?: string // public key
   description?: string
-  attributes?: {
-    [k: string]: string | number
-  }
+  attributes?: { id: string; property: string; text: string }[]
 }
 
 export interface TokenMetadata {
