@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Box, useToast } from '@chakra-ui/react'
+import { Box, GridItem, useToast } from '@chakra-ui/react'
 import BucketCard from '../components/common/Cards/BucketCard'
 import { Button } from '@chakra-ui/react'
 import { TextileInstance } from '../services/textile/textile'
@@ -42,11 +42,6 @@ export default function All() {
 
     // console.log(photos);
     // console.log(cid);
-  }
-  // TODO: Be able to delete NFT item
-  const deleteMedia = async (photo: NFTMetadata) => {
-    const textileInstance = await TextileInstance.getInstance()
-    await textileInstance.deleteNFTFromBucket(photo)
   }
 
   const batchStorage = async () => {
@@ -105,38 +100,29 @@ export default function All() {
         display="flex"
         flexDir={['column', 'column', 'row', 'row']}
         alignItems={['center', 'center', 'flex-start', 'flex-start']}
-        justifyContent={[
-          'space-evenly',
-          'space-evenly',
-          'space-evenly',
-          'space-evenly',
-        ]}
+        justifyContent="space-evenly"
         flexWrap={['nowrap', 'nowrap', 'wrap', 'wrap']}
+        mb={12}
       >
         <Button colorScheme="blue" onClick={fetchGallery} hidden={displayPix}>
-          {' '}
-          Fetch my photos{' '}
+          Fetch my photos
         </Button>
         <BatchStorage onClick={batchStorage}></BatchStorage>
       </Box>
       <Box
-        display="flex"
-        minWidth="100vw"
-        flexDir={['column', 'column', 'row', 'row']}
-        padding={[2, 2, 2, 10]}
-        alignItems={['center', 'center', 'flex-start', 'flex-start']}
-        justifyContent={['center', 'center', 'center', 'center']}
-        flexWrap={['nowrap', 'nowrap', 'wrap', 'wrap']}
+        display="grid"
+        gridTemplateColumns={[
+          'repeat(2, 1fr)',
+          'repeat(2, 1fr)',
+          'repeat(3, 1fr)',
+          'repeat(4, 1fr)',
+        ]}
+        gap={5}
       >
         {photos.map((photo, index) => (
-          <BucketCard
-            key={index}
-            imagelink={`https://dweb.link/ipfs/${photo.cid}`}
-            creator=""
-            name={photo.name}
-            description={photo.description}
-            deleteMedia={() => deleteMedia(photo)}
-          />
+          <GridItem key={index} overflow="hidden">
+            <BucketCard photo={photo} />
+          </GridItem>
         ))}
       </Box>
     </Box>
