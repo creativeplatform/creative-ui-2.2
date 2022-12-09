@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import * as pb from '@textile/threads-client-grpc/threads_pb'
 import {
   chakra,
   Box,
@@ -49,8 +50,20 @@ const UploadNftForm = (props: Partial<UploadNftFormProps>) => {
   const [fileName, setFileName] = useState('')
   const [preview, setPreview] = useState('')
   const [spin, setSpin] = useState(false)
+  const [collections, setCollections] = useState<
+    pb.GetCollectionInfoReply.AsObject[]
+  >([])
 
   const { account, library } = useEthers()
+
+  useEffect(() => {
+    ;(async () => {
+      const collections = await (
+        await TextileInstance.getInstance()
+      ).collections()
+      setCollections(collections)
+    })()
+  }, [])
 
   // create a preview as a side effect, whenever selected file is changed
   useEffect(() => {
@@ -70,6 +83,7 @@ const UploadNftForm = (props: Partial<UploadNftFormProps>) => {
     handleSubmit,
     register,
     formState: { errors, isSubmitting },
+    getValues,
   } = useForm()
 
   const submitHandler = async (event) => {
@@ -121,7 +135,7 @@ const UploadNftForm = (props: Partial<UploadNftFormProps>) => {
       attributes
     )
 
-    await textileInstance.addNFTToUserCollection(nftMetadata)
+    await textileInstance.addNFTToUserCollection(nftMetadata, values.collection)
 
     const all: NFTMetadata[] = await textileInstance.getAllUserNFTs()
 
@@ -180,7 +194,7 @@ const UploadNftForm = (props: Partial<UploadNftFormProps>) => {
 
     console.log(metadataRes)
 
-    await textileInstance.addNFTToUserCollection(nftMetadata)
+    await textileInstance.addNFTToUserCollection(nftMetadata, values.collection)
 
     setSpin(false)
 
@@ -299,9 +313,11 @@ const UploadNftForm = (props: Partial<UploadNftFormProps>) => {
             <Select
               color={useColorModeValue('gray.700', 'gray.50')}
               placeholder="Select Album"
+              {...register('collection')}
             >
-              <option>Album 1</option>
-              <option>Album 2</option>
+              {collections.map((c) => (
+                <option key={c.name}>{c.name}</option>
+              ))}
             </Select>
           </FormControl>
           {/*<FormControl id="privacy" as={GridItem} colSpan={[3, 2]}>

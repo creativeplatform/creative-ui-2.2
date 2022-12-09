@@ -1,4 +1,5 @@
 import { CoreAPI } from '@textile/eth-storage'
+import * as pb from '@textile/threads-client-grpc/threads_pb'
 import {
   Where,
   WriteTransaction,
@@ -125,6 +126,13 @@ export class TextileInstance {
             })
       )
     )
+  }
+
+  public async collections(): Promise<pb.GetCollectionInfoReply.AsObject[]> {
+    if (!this.client) {
+      throw new Error('No client')
+    }
+    return this.client.listCollections(this.threadID)
   }
 
   private static async loginWithChallenge(newUser?: UserModel) {
@@ -470,12 +478,12 @@ export class TextileInstance {
     console.log('textile cid', cid)
   }
 
-  public async addNFTToUserCollection(nft: NFTMetadata) {
+  public async addNFTToUserCollection(nft: NFTMetadata, collection: string) {
     if (!this.client) {
       throw new Error('No client')
     }
     console.log('adding nft to user collection...')
-    await this.client.create(this.threadID, this.names.n, [nft])
+    await this.client.create(this.threadID, collection, [nft])
   }
 
   public async getAllUserNFTs(): Promise<Array<NFTMetadata>> {
