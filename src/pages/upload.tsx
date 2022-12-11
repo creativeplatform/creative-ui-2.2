@@ -7,7 +7,7 @@ import {
   Heading,
   Text,
 } from '@chakra-ui/react'
-import UploadNftForm from 'src/components/forms/UploadNftForm'
+import UploadNftForm from '../components/forms/UploadNftForm'
 
 class StrongType<Definition, Type> {
   // @ts-ignore
