@@ -255,7 +255,7 @@ const BucketCard = ({ photo, deleteMedia }) => {
                   ]}
                   gap={2}
                 >
-                  {photo.attributes.map ? (
+                  {photo.attributes.map && photo.attributes.length ? (
                     photo.attributes.map((att) => (
                       <GridItem key={att.property}>
                         <Flex
