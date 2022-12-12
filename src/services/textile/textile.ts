@@ -417,14 +417,7 @@ export class TextileInstance {
       throw new Error('No bucket client or root key')
     }
 
-    await this.bucketInfo.bucket.removePath(this.bucketInfo.bucketKey, nft.path)
-
-    if (nft.tokenMetadataPath) {
-      await this.bucketInfo.bucket.removePath(
-        this.bucketInfo.bucketKey,
-        nft.tokenMetadataPath
-      )
-    }
+    await this.client.delete(this.threadID, this.names.n, [nft._id])
   }
 
   public async uploadTokenMetadata(

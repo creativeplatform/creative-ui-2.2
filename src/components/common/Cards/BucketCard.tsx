@@ -19,9 +19,6 @@ import {
   generateTokenId,
 } from '../../../rarible/createLazyMint'
 import Image from 'next/image'
-import { CgMoreVertical, CgMoreVerticalO } from 'react-icons/cg'
-import { NFTMetadata } from 'src/services/textile/types'
-import { TextileInstance } from 'src/services/textile/textile'
 import { useRouter } from 'next/router'
 import Lock from '../Lock/lock'
 
@@ -84,15 +81,10 @@ const submitHandler = async () => {
   console.log(await useCreateLazyMint)
 }
 
-// TODO: Be able to delete NFT item
-const deleteMedia = async (photo: NFTMetadata) => {
-  const textileInstance = await TextileInstance.getInstance()
-  await textileInstance.deleteNFTFromBucket(photo)
-}
-
-export default function BrandDiscovery({ photo }) {
+const BucketCard = ({ photo, deleteMedia }) => {
   const router = useRouter()
   const [isOpen, setIsOpen] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false)
   const blackAndWhite = useColorModeValue('black', 'white')
   const imagelink = `https://dweb.link/ipfs/${photo.cid}`
 
@@ -263,9 +255,9 @@ export default function BrandDiscovery({ photo }) {
                   ]}
                   gap={2}
                 >
-                  {photo.attributes.map ? (
+                  {photo.attributes.map && photo.attributes.length ? (
                     photo.attributes.map((att) => (
-                      <GridItem key={att._id}>
+                      <GridItem key={att.property}>
                         <Flex
                           direction="column"
                           alignItems="center"
@@ -306,7 +298,11 @@ export default function BrandDiscovery({ photo }) {
                     _focus={{
                       bg: 'red.500',
                     }}
-                    onClick={() => deleteMedia(photo)}
+                    isLoading={isDeleting}
+                    onClick={() => {
+                      setIsDeleting(true)
+                      deleteMedia(photo)
+                    }}
                   >
                     Delete
                   </Button>
@@ -377,3 +373,5 @@ export default function BrandDiscovery({ photo }) {
     </>
   )
 }
+
+export default BucketCard
