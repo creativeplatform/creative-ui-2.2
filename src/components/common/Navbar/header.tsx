@@ -42,7 +42,7 @@ import {
   LinkOverlay,
 } from '@chakra-ui/react'
 // import transakSDK from '@transak/transak-sdk'
-import { Wert }  from "./Wert"
+import WertModule from '@wert-io/module-react-component';
 import NextLink from 'next/link'
 import NotificationDrawer from '../Notification/NotificationDrawer'
 import { useViewportScroll } from 'framer-motion'
@@ -99,6 +99,13 @@ const Header = ({ children }: HeaderProps): JSX.Element => {
   const bg = useColorModeValue('#F0F0F0', 'gray.900')
   const cl = useColorModeValue('gray.800', 'white')
   const blackAndWhite = useColorModeValue('white', 'black')
+
+  const [wertOptions, setWertOptions] = useState({
+    partner_id: process.env.WERT_PARTNER_ID,
+    listeners: {
+      loaded: () => console.log('loaded'),
+    }
+});
 
   useEffect(() => {
     return scrollY.onChange(() => setY(scrollY.get()))
@@ -343,14 +350,14 @@ const Header = ({ children }: HeaderProps): JSX.Element => {
                         <InviteUser />
                       </MenuItem>
                     )}
-                    {isLoggedIn && (
+                    {isLoggedIn && role === 'brand' || role === 'pro' && (
                         <MenuItem
                           as={Button}
                           colorScheme="pink"
                           _hover={{
                             color: blackAndWhite,
                           }}
-                          onClick={() => Wert(process.env.WERT_PARTNER_ID)}
+                          // onClick={() => WertModule()}
                           variant="solid"
                           size="md"
                           mt={2}
