@@ -1,7 +1,6 @@
 import { Heading, Box, useColorModeValue, Button, Divider } from "@chakra-ui/react";
 import CreativeCard from '../components/common/Cards/CreativeCard';
 import BrandHero from '../components/BrandHero';
-import { Content } from "../components/common/Content/Content";
 import { Main } from "../components/common/Main/Main";
 import LiveCampaigns from "../components/LiveCampaigns";
 import TrendingCollections from "../components/TrendingCollections";
@@ -11,7 +10,7 @@ import TopCreatives from "../components/TopCreatives";
 
 export default function Home() {
   return (
-    <Box>
+    <>
       <BrandHero />
       <Main>
         {/* LATEST BRAND CAMPAIGNS */}
@@ -24,12 +23,12 @@ export default function Home() {
           <Divider w={200} mb={2}/>
         <Box
            display='flex'
+           minWidth='100vw'
            flexDir={['column','column','row', 'row']}
            padding={[2, 2, 2, 10]}
            alignItems={['center','center','flex-start', 'flex-start']}
            justifyContent={['center','center','center', 'center']}
-           flexWrap={['nowrap', 'nowrap', 'wrap', 'wrap']}
-           >
+           flexWrap={['nowrap', 'nowrap', 'wrap', 'wrap']}>
           <CreativeCard />
           <CreativeCard />
           <CreativeCard />
@@ -110,12 +109,12 @@ export default function Home() {
         <FilterTab />
         <Box             
           display='flex'
-          maxWidth='100vw'
-          flexDir={['column','column','column', 'row']}
+          minWidth='100vw'
+          flexDir={['column','column','row', 'row']}
           padding={[2, 2, 2, 10]}
           alignItems={['center','center','flex-start', 'flex-start']}
           justifyContent={['center','center','center', 'center']}
-          flexWrap={['nowrap', 'nowrap', 'nowrap', 'wrap']}>
+          flexWrap={['nowrap', 'nowrap', 'wrap', 'wrap']}>
           <BrandDiscovery imagelink= "https://picsum.photos/200/300.webp?random=1" />
           <BrandDiscovery imagelink= "https://picsum.photos/200/300.webp?random=2" />
           <BrandDiscovery imagelink= "https://picsum.photos/200/300.webp?random=3" />
@@ -136,6 +135,6 @@ export default function Home() {
         </Box>
         {/* DISCOVER END*/}
       </Main>
-    </Box>
+    </>
   );
 }

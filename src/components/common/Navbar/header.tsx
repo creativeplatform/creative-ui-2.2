@@ -41,7 +41,8 @@ import {
   LinkBox,
   LinkOverlay,
 } from '@chakra-ui/react'
-import transakSDK from '@transak/transak-sdk'
+// import transakSDK from '@transak/transak-sdk'
+import { Wert }  from "./Wert"
 import NextLink from 'next/link'
 import NotificationDrawer from '../Notification/NotificationDrawer'
 import { useViewportScroll } from 'framer-motion'
@@ -106,48 +107,18 @@ const Header = ({ children }: HeaderProps): JSX.Element => {
   const { height } = ref.current
     ? ref.current.getBoundingClientRect()
     : { height: 0 }
-  const chainName =
+  
+    const chainName =
     chainId === ChainId.Mumbai
       ? 'Mumbai'
       : chainId === ChainId.Polygon
       ? 'Polygon'
       : ''
+  
   const myLoader = ({ src, width }) => {
     return `${src}?w=${width}&q=${75}`
   }
 
-  function loadInit() {
-    const transak = new transakSDK({
-      apiKey: '07d4475a-4b8c-49d6-ba88-61075d649c6f', // Your API Key
-      environment: 'STAGING', // STAGING/PRODUCTION
-      hostURL: window.location.href,
-      widgetHeight: '625px',
-      widgetWidth: '500px',
-      // Examples of some of the customization parameters you can pass
-      defaultCryptoCurrency: 'MATIC', // Example 'ETH'
-      walletAddress: account, // Your customer's wallet address
-      //themeColor: '[COLOR_HEX]', // App theme color
-      fiatCurrency: 'USD', // If you want to limit fiat selection eg 'USD'
-      //email: '', // Your customer's email address
-      redirectURL: 'localhost:3000',
-    })
-
-    transak.init()
-
-    // To get all the events
-    transak.on(transak.ALL_EVENTS, (/*data*/) => {
-      // console.log(data)
-    })
-
-    // This will trigger when the user marks payment is made.
-    transak.on(transak.EVENTS.TRANSAK_ORDER_SUCCESSFUL, (/*orderData*/) => {
-      // console.log(orderData);
-      transak.close()
-    })
-    return () => {
-      transak.cleanup()
-    }
-  }
   const MobileNavContent = (
     <VStack
       pos="absolute"
@@ -373,29 +344,29 @@ const Header = ({ children }: HeaderProps): JSX.Element => {
                       </MenuItem>
                     )}
                     {isLoggedIn && (
-                      <MenuItem
-                        as={Button}
-                        colorScheme="pink"
-                        _hover={{
-                          color: blackAndWhite,
-                        }}
-                        variant="solid"
-                        size="md"
-                        mt={2}
-                        mb={4}
-                        onClick={loadInit}
-                        rightIcon={
-                          <Image
-                            loader={myLoader}
-                            height={40}
-                            width={40}
-                            src="/images/visa.svg"
-                            alt="Transak"
-                          />
-                        }
-                      >
-                        💰 Add Funds
-                      </MenuItem>
+                        <MenuItem
+                          as={Button}
+                          colorScheme="pink"
+                          _hover={{
+                            color: blackAndWhite,
+                          }}
+                          onClick={() => Wert(process.env.WERT_PARTNER_ID)}
+                          variant="solid"
+                          size="md"
+                          mt={2}
+                          mb={4}
+                          rightIcon={
+                            <Image
+                              loader={myLoader}
+                              height={40}
+                              width={40}
+                              src="/images/visa.svg"
+                              alt="Transak"
+                            />
+                          }
+                        >
+                          💰 Add Funds
+                        </MenuItem>
                     )}
                     <MenuItem
                       display={['flex', 'flex', 'none', 'none']}
