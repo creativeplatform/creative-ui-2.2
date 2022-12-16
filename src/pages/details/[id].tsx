@@ -115,11 +115,16 @@ export default function Details() {
         </Box>
         <StepsComponent
           steps={[
-            { label: 'Form 1' },
-            { label: 'Form 2' },
-            { label: 'Form 3' },
+            { label: 'Submit 📥' },
+            { label: 'Vote 🗳️' },
+            { label: 'Win 🏆' },
           ]}
         >
+          <CountDown
+            title="Submission Deadline"
+            time={property.submission}
+            tooltip="lorem ipsum"
+          />
           <CountDown
             title="Voting Ends"
             time={property.voting}
@@ -128,11 +133,6 @@ export default function Details() {
           <CountDown
             title="Decision"
             time={property.decision}
-            tooltip="lorem ipsum"
-          />
-          <CountDown
-            title="Submission Deadline"
-            time={property.submission}
             tooltip="lorem ipsum"
           />
         </StepsComponent>

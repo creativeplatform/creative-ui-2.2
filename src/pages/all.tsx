@@ -38,10 +38,6 @@ const All = () => {
       return
     }
     setDisplayPix(true)
-    // console.log(photos);
-
-    // console.log(photos);
-    // console.log(cid);
   }
 
   const batchStorage = async () => {

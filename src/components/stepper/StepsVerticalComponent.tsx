@@ -17,7 +17,7 @@ export const StepsComponent: FC<{
       <Steps
         checkIcon={FiCheckCircle}
         activeStep={activeStep}
-        labelOrientation={'horizontal'}
+        labelOrientation={'vertical'}
       >
         {props.steps.map(({ label }, index) => (
           <Step label={label} key={label}>
@@ -30,7 +30,7 @@ export const StepsComponent: FC<{
       {activeStep === props.steps.length ? (
         <Flex p={4} bg={bg} width="100%" flexDirection="column">
           <Heading fontSize="xl" textAlign="center">
-            Woohoo 🎊 We Have A Winner!
+            Let's Get The Party Started 💃🏾🕺🏾
           </Heading>
           <Button size="sm" onClick={reset}>Reset</Button>
 {/*   TODO: ADD WINNER OF CAMPAIGN AND SHARE BUTTON TO LENSTER.XYZ HERE */}

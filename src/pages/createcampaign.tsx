@@ -39,6 +39,7 @@ import {
 } from '../services/textile/types'
 import { TextileInstance } from '../services/textile/textile'
 import LoomRecordButton from 'src/components/LoomRecordButton'
+import StepsVerticalComponent from '../components/stepper/StepsVerticalComponent'
 
 const abi = require('../contracts/Pool.abi')
 const bytecode = require('../contracts/Pool.bytecode')
@@ -367,12 +368,19 @@ export default function Component() {
                 // overflow={{ sm: "hidden" }}
                 onSubmit={campaignForm.handleSubmit}
               >
-                <Stack
+                {/* <Stack
                   px={4}
                   py={5}
                   bg={useColorModeValue('white', 'gray.700')}
                   spacing={6}
                   p={{ sm: 6 }}
+                > */}
+                <StepsVerticalComponent
+                  steps={[
+                    { label: 'Campaign 📜' },
+                    { label: 'Settings ⚙️' },
+                    { label: 'Notify 📟' },
+                  ]}
                 >
                   <SimpleGrid columns={3} spacing={6}>
                     <FormControl as={GridItem} colSpan={[3, 2]}>
@@ -910,7 +918,8 @@ export default function Component() {
                       />
                     </Box>
                   </FormControl>
-                </Stack>
+                  </StepsVerticalComponent>
+                {/* </Stack> */}
                 <Box
                   px={{ base: 4, sm: 6 }}
                   py={3}
