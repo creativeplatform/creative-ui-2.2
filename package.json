@@ -33,6 +33,7 @@
     "@venly/web3-provider": "^0.32.0",
     "@walletconnect/web3-provider": "^1.7.8",
     "@web3-react/core": "^6.1.9",
+    "@wert-io/module-react-component": "^0.2.0",
     "@wert-io/widget-initializer": "^0.1.2",
     "authereum": "^0.1.14",
     "axios": "^0.21.2",
