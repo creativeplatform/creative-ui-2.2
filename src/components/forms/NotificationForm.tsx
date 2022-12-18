@@ -9,23 +9,12 @@ import {
   Heading,
   Text,
   Stack,
-  FormControl,
-  FormLabel,
-  Input,
-  InputGroup,
-  InputLeftAddon,
-  FormHelperText,
-  Textarea,
-  Avatar,
-  Icon,
-  Button,
-  VisuallyHidden,
-  Select,
   Checkbox,
   RadioGroup,
   Radio,
 } from "@chakra-ui/react";
-import { FaUser } from "react-icons/fa";
+import { TextileInstance } from '../../services/textile/textile'
+
 
 export default function NotificationForm() {
     return (
@@ -175,21 +164,6 @@ export default function NotificationForm() {
                   </RadioGroup>
                 </chakra.fieldset>
               </Stack>
-              <Box
-                px={{ base: 4, sm: 6 }}
-                py={3}
-                bg={useColorModeValue("gray.50", "gray.900")}
-                textAlign="right"
-              >
-                <Button
-                  type="submit"
-                  colorScheme="brand"
-                  _focus={{ shadow: "" }}
-                  fontWeight="md"
-                >
-                  Save
-                </Button>
-              </Box>
             </chakra.form>
           </GridItem>
         </SimpleGrid>
