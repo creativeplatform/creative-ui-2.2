@@ -21,7 +21,7 @@ export const StepsComponent: FC<{
       >
         {props.steps.map(({ label }, index) => (
           <Step label={label} key={label}>
-            <Flex my={4} p={4} bg={bg} borderRadius={10}>
+            <Flex my={8} p={4} bg={bg} borderRadius={10}>
               {props.children[index]}
             </Flex>
           </Step>
@@ -29,8 +29,8 @@ export const StepsComponent: FC<{
       </Steps>
       {activeStep === props.steps.length ? (
         <Flex p={4} bg={bg} width="100%" flexDirection="column">
-          <Heading fontSize="xl" textAlign="center">
-            Let's Get The Party Started 💃🏾🕺🏾
+          <Heading fontSize="xl" textAlign="center" pb={4}>
+            Let's Get The Party Started 💃🏻🕺🏾
           </Heading>
           <Button size="sm" onClick={reset}>Reset</Button>
 {/*   TODO: ADD WINNER OF CAMPAIGN AND SHARE BUTTON TO LENSTER.XYZ HERE */}
