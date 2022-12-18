@@ -16,7 +16,7 @@ class StrongType<Definition, Type> {
   constructor(public value?: Type) {}
 }
 
-export default function All() {
+const All = () => {
   const [displayPix, setDisplayPix] = useState(false)
   const [photos, setPhotos] = useState<NFTMetadata[]>([])
   const toast = useToast()
@@ -38,10 +38,6 @@ export default function All() {
       return
     }
     setDisplayPix(true)
-    // console.log(photos);
-
-    // console.log(photos);
-    // console.log(cid);
   }
 
   const batchStorage = async () => {
@@ -65,6 +61,21 @@ export default function All() {
         )
       )
     }
+  }
+
+  const deleteMedia = async (photo: NFTMetadata) => {
+    const textileInstance = await TextileInstance.getInstance()
+    await textileInstance.deleteNFTFromBucket(photo)
+    setPhotos((photos) => {
+      return photos.filter((p) => p._id !== photo._id)
+    })
+    toast({
+      title: 'Photo deleted',
+      status: 'success',
+      description: 'The photo has been successfully deleted from your library',
+      duration: 9000,
+      isClosable: true,
+    })
   }
 
   const OneItemStorage = async (nftMetadata) => {
@@ -119,12 +130,14 @@ export default function All() {
         ]}
         gap={5}
       >
-        {photos.map((photo, index) => (
-          <GridItem key={index} overflow="hidden">
-            <BucketCard photo={photo} />
+        {photos.map((photo) => (
+          <GridItem key={photo._id} overflow="hidden">
+            <BucketCard photo={photo} deleteMedia={deleteMedia} />
           </GridItem>
         ))}
       </Box>
     </Box>
   )
 }
+
+export default All

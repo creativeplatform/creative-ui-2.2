@@ -124,7 +124,7 @@ export default function Vote ({ proposals }) {
                     <Box
                         display={'flex'}
                         flexDir={'row'}
-                        minW={'70vw'}
+                        minW={'50vw'}
                         marginTop={5}
                         padding={2}
                         borderTopRadius={10}
@@ -184,7 +184,7 @@ export default function Vote ({ proposals }) {
                     <Box
                         display={'flex'}
                         flexDir={'row'}
-                        minW={'70vw'}
+                        minW={'50vw'}
                         padding={2}
                         background={'#1A202C'}>
                         <RadioGroup onChange={setValue} value={value}>

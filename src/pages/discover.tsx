@@ -5,20 +5,20 @@ export default function Discover() {
   return (
     <Box
       display="flex"
-      minW="100vw"
-      maxW="100vw"
+      minW="40vw"
+      maxW="80vw"
       flexDir={['column', 'column', 'row', 'row']}
       alignItems={['center', 'center', 'flex-start', 'flex-start']}
-      justifyContent={['center', 'center', 'flex-start', 'flex-start']}
+      justifyContent={['center', 'center', 'center', 'center']}
       flexWrap={['nowrap', 'nowrap', 'wrap', 'wrap']}
     >
       <Box
-        display="flex"
-        minWidth="100vw"
-        flexDir={['column', 'column', 'column', 'column']}
+        display='flex'
+        minWidth='80vw'
+        flexDir={['column','column','row', 'row']}
         padding={[2, 2, 2, 10]}
-        alignItems={['center', 'center', 'center', 'flex-start']}
-        justifyContent={['center', 'center', 'center', 'center']}
+        alignItems={['center','center','flex-start', 'flex-start']}
+        justifyContent={['center','center','center', 'center']}
         flexWrap={['nowrap', 'nowrap', 'wrap', 'wrap']}
       >
         <Text as="h1" fontSize="4xl" fontStyle="bold" margin="10">
@@ -27,12 +27,12 @@ export default function Discover() {
         <FilterTab />
       </Box>
       <Box
-        display="flex"
-        minWidth="100vw"
-        flexDir={['column', 'column', 'row', 'row']}
+        display='flex'
+        minWidth='80vw'
+        flexDir={['column','column','row', 'row']}
         padding={[2, 2, 2, 10]}
-        alignItems={['center', 'center', 'flex-start', 'flex-start']}
-        justifyContent={['center', 'center', 'flex-start', 'flex-start']}
+        alignItems={['center','center','flex-start', 'flex-start']}
+        justifyContent={['center','center','center', 'center']}
         flexWrap={['nowrap', 'nowrap', 'wrap', 'wrap']}
       >
         <BrandDiscovery imagelink="https://picsum.photos/200/300.webp?random=1" />
