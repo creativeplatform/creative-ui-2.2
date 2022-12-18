@@ -1,4 +1,4 @@
-import React from "react";
+import React,  { useState } from "react";
 import {
     chakra,
     Box,
@@ -29,6 +29,10 @@ import {
 } from "@chakra-ui/react";
 import { FaUser } from "react-icons/fa";
 import { CheckIcon, CloseIcon, EditIcon } from "@chakra-ui/icons";
+import { TextileInstance } from '../../services/textile/textile'
+
+const abi = require('../../contracts/Pool.abi')
+const bytecode = require('../../contracts/Pool.bytecode')
 
 function EditableControls() {
     const {
@@ -64,6 +68,8 @@ function EditableControls() {
   }
 
 export default function PoolForm(props) {
+    const [poolDeployable, setPoolDeployable] = useState(false)
+
     return (
         <Box mt={[10, 0]}>
           <SimpleGrid
@@ -443,16 +449,6 @@ export default function PoolForm(props) {
                   bg={useColorModeValue('gray.50', 'gray.900')}
                   textAlign="right"
                 >
-                  <ButtonGroup>
-                    <Button
-                      type="submit"
-                      colorScheme={'red'}
-                      _focus={{ shadow: '' }}
-                      fontWeight="md"
-                      color={useColorModeValue('gray.700', 'gray.800')}
-                    >
-                      Save
-                    </Button>
                     <Button
                     //   isDisabled={poolDeployable}
                       colorScheme={'red'}
@@ -463,7 +459,6 @@ export default function PoolForm(props) {
                     >
                       Deploy Campaign
                     </Button>
-                  </ButtonGroup>
                 </Box>
               </form>
             </GridItem>
