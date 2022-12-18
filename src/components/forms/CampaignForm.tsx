@@ -28,7 +28,7 @@ const imgUploadContainer: CSSProperties = {
   }
   
   const dropzoneContainer: CSSProperties = {
-    width: '450px',
+    width: '320px',
     height: '107px',
     display: 'flex',
     justifyItems: 'start',
@@ -124,8 +124,8 @@ export default function CampaignForm(props) {
                 <SimpleGrid columns={3} spacing={6}>
                     <FormControl as={GridItem} colSpan={[3, 2]}>
                       <FormLabel
-                        fontSize="sm"
-                        fontWeight="md"
+                        fontSize="md"
+                        fontWeight="lg"
                         color={useColorModeValue('gray.700', 'gray.50')}
                         htmlFor="brandName"
                       >
@@ -147,8 +147,8 @@ export default function CampaignForm(props) {
                   <SimpleGrid columns={3} spacing={6}>
                     <FormControl as={GridItem} colSpan={[3, 2]}>
                       <FormLabel
-                        fontSize="sm"
-                        fontWeight="md"
+                        fontSize="md"
+                        fontWeight="lg"
                         color={useColorModeValue('gray.700', 'gray.50')}
                       >
                         Brand Website
@@ -196,14 +196,14 @@ export default function CampaignForm(props) {
                           onChange={props.handleChange}
                           id="twitterAccount"
                           name="twitterAccount"
-                          placeholder="creativecrtv"
+                          placeholder="thecreative.lens"
                           focusBorderColor="brand.400"
                           rounded="md"
                           color={useColorModeValue('gray.700', 'gray.50')}
                         />
                       </InputGroup>
                       <FormHelperText>
-                        Verify your account via Twitter (0.1 LINK).
+                        Verify your account via LENS 🌿.
                       </FormHelperText>
                     </FormControl>
                   </SimpleGrid>
@@ -212,8 +212,8 @@ export default function CampaignForm(props) {
                     <FormControl mt={1} as={GridItem} colSpan={[3, 2]}>
                       <FormLabel
                         htmlFor="campaignBrief"
-                        fontSize="sm"
-                        fontWeight="md"
+                        fontSize="md"
+                        fontWeight="lg"
                         color={useColorModeValue('gray.700', 'gray.50')}
                       >
                         Campaign Brief
@@ -244,8 +244,8 @@ export default function CampaignForm(props) {
                     <FormControl as={GridItem} colSpan={[3, 2]}>
                       <FormLabel
                         htmlFor="email"
-                        fontSize="sm"
-                        fontWeight="md"
+                        fontSize="md"
+                        fontWeight="lg"
                         color={useColorModeValue('gray.700', 'gray.50')}
                       >
                         Email address
@@ -277,8 +277,8 @@ export default function CampaignForm(props) {
                     <FormControl>
                       <FormLabel
                         htmlFor="country"
-                        fontSize="sm"
-                        fontWeight="md"
+                        fontSize="md"
+                        fontWeight="lg"
                         color={useColorModeValue('gray.700', 'gray.50')}
                       >
                         Country / Region
@@ -293,8 +293,8 @@ export default function CampaignForm(props) {
                         mt={1}
                         focusBorderColor="brand.400"
                         shadow="sm"
-                        size="sm"
-                        w="full"
+                        size="lg"
+                        w="auto"
                         rounded="md"
                         color={useColorModeValue('gray.700', 'gray.50')}
                       >
@@ -614,7 +614,7 @@ export default function CampaignForm(props) {
                       <aside style={thumbsContainer as CSSProperties}>
                         {files.map((f, i) => (
                           <Box key={`${i}.${f.name}`}>
-                            <Avatar size="md" ml={5} src={f.preview} />
+                            <Avatar size="lg" ml={5} src={f.preview} />
                             <Text style={thumbLabel as CSSProperties}>
                               {f.name} -{' '}
                               {Math.floor(Math.log(f.size) / Math.log(1024))}
